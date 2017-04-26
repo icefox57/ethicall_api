@@ -13,7 +13,7 @@
     "/login/" : {
       "get" : {
         "tags" : [ "登入" ],
-        "summary" : "test1",
+        "summary" : "login with phone and password",
         "parameters" : [ {
           "name" : "username",
           "in" : "query",
@@ -46,6 +46,7 @@
     "/login/token/" : {
       "get" : {
         "tags" : [ "登入" ],
+        "summary" : "login with weixin parameter",
         "parameters" : [ {
           "name" : "openid",
           "in" : "query",
@@ -137,6 +138,7 @@
         }
       },
       "post" : {
+        "summary" : "update statement status",
         "description" : "修改对账单状态",
         "parameters" : [ {
           "name" : "id",
@@ -312,6 +314,7 @@
         }
       },
       "post" : {
+        "summary" : "add user's bankcard",
         "description" : "添加银行卡",
         "parameters" : [ {
           "in" : "body",
@@ -391,6 +394,7 @@
         }
       },
       "post" : {
+        "summary" : "add withdrawls request",
         "description" : "提现",
         "parameters" : [ {
           "in" : "body",
