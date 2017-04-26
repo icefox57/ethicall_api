@@ -1,0 +1,1533 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "医时 API",
+    "version" : "1.0.0",
+    "title" : "医时 API"
+  },
+  "host" : "dev.ethicall.cn",
+  "basePath" : "/sanic_base",
+  "schemes" : [ "https" ],
+  "produces" : [ "application/json" ],
+  "paths" : {
+    "/login/" : {
+      "get" : {
+        "tags" : [ "登入" ],
+        "parameters" : [ {
+          "name" : "username",
+          "in" : "query",
+          "description" : "用户名/手机号",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "password",
+          "in" : "query",
+          "description" : "密码/动态密码",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "登入成功",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/login/token/" : {
+      "get" : {
+        "tags" : [ "登入" ],
+        "parameters" : [ {
+          "name" : "openid",
+          "in" : "query",
+          "description" : "openid",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "access_token",
+          "in" : "query",
+          "description" : "access_token",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "platform",
+          "in" : "query",
+          "description" : "平台名 (weixin,qq...)",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "登入成功",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/statements/list/{status}" : {
+      "get" : {
+        "tags" : [ "对账单" ],
+        "summary" : "对账单列表",
+        "description" : "获取待确认对账单列表",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "path",
+          "description" : "对账单状态",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "对账单概览 + 对账单列表",
+            "schema" : {
+              "$ref" : "#/definitions/StatementSet"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/statements/{id}" : {
+      "get" : {
+        "tags" : [ "对账单" ],
+        "summary" : "对账单",
+        "description" : "获取单个对账单",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "对账单状id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "对账单详情",
+            "schema" : {
+              "$ref" : "#/definitions/StatementofAccount"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post" : {
+        "description" : "修改对账单状态",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "对账单状id",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "status",
+          "description" : "修改的状态",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/status"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "添加成功 修改状态",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_1"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/statements/{id}/{type}" : {
+      "get" : {
+        "tags" : [ "对账单" ],
+        "summary" : "对账单的资金来源列表",
+        "description" : "获取单个对账单中某种资金来源的列表",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "对账单状id",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "type",
+          "in" : "path",
+          "description" : "资金来源类型",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "资金来源列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/SourceDetail"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/source_detail/{status}" : {
+      "get" : {
+        "tags" : [ "总资产" ],
+        "summary" : "资金来源明细",
+        "description" : "传状态已入账获取累积收入列表,传类型未入账获取未入账列表",
+        "parameters" : [ {
+          "name" : "status",
+          "in" : "path",
+          "description" : "资金来源状态",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "资金来源列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/SourceDetail"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/total_income/" : {
+      "get" : {
+        "tags" : [ "总资产" ],
+        "summary" : "累积收入",
+        "description" : "返回用户某账户下得累积收入数据",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "用户账户id",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "累积收入数据+已入账资金来源列表",
+            "schema" : {
+              "$ref" : "#/definitions/TotalIncome"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/user/" : {
+      "get" : {
+        "tags" : [ "用户" ],
+        "summary" : "用户信息",
+        "description" : "获取用户信息",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "用户信息",
+            "schema" : {
+              "$ref" : "#/definitions/UserInfo"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/user/bank_card/" : {
+      "get" : {
+        "tags" : [ "用户" ],
+        "summary" : "用户银行卡",
+        "description" : "获取用户银行卡信息",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "银行卡列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/UserBankCard"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post" : {
+        "description" : "添加银行卡",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "card",
+          "description" : "给用户添加新银行卡",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/card"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "添加成功 银行卡返回id",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_2"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/user/account/" : {
+      "get" : {
+        "tags" : [ "用户" ],
+        "summary" : "用户账户",
+        "description" : "获取用户账户信息列表",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "账户列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/UserAccount"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/withdrawals/" : {
+      "get" : {
+        "tags" : [ "提现" ],
+        "summary" : "用户提现记录",
+        "description" : "获取用户某账户的提现记录",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "query",
+          "description" : "用户账户id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "提现记录列表",
+            "schema" : {
+              "$ref" : "#/definitions/Balance"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      },
+      "post" : {
+        "description" : "提现",
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "parameter",
+          "description" : "发起提现请求",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/parameter"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "提现请求成功",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_3"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/card/home/" : {
+      "get" : {
+        "tags" : [ "首页" ],
+        "summary" : "首页卡片列表",
+        "description" : "获取用户某账户的提现记录",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "首页卡片列表",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Card"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/task/{id}" : {
+      "get" : {
+        "tags" : [ "任务" ],
+        "summary" : "任务详情",
+        "description" : "获取任务详情",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "任务id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "任务",
+            "schema" : {
+              "$ref" : "#/definitions/Task"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/task/doctor/{id}" : {
+      "get" : {
+        "tags" : [ "任务" ],
+        "summary" : "任务医生详情",
+        "description" : "获取添加到该任务的医生,完成状态详情",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "任务id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "任务医生",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/TaskDoctor"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/task/child/document/{id}" : {
+      "get" : {
+        "tags" : [ "任务" ],
+        "summary" : "子任务文档详情",
+        "description" : "获取该子任务相关文档详情",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "子任务id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "子任务文档",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Document"
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/task/child/survey/{id}" : {
+      "get" : {
+        "tags" : [ "任务" ],
+        "summary" : "子任务调研详情",
+        "description" : "获取该子任务相关调研详情",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "子任务id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "子任务文档",
+            "schema" : {
+              "$ref" : "#/definitions/Survey"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/task/child/status/{id}" : {
+      "get" : {
+        "tags" : [ "任务" ],
+        "summary" : "快速获取子任务状态",
+        "description" : "用于刷新子任务状态",
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "子任务id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "状态",
+            "schema" : {
+              "$ref" : "#/definitions/inline_response_200_4"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/config/" : {
+      "get" : {
+        "tags" : [ "配置" ],
+        "summary" : "配置列表",
+        "description" : "获取配置信息列表",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "配置列表",
+            "schema" : {
+              "$ref" : "#/definitions/Config"
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Card" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "卡片id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "模板名"
+        },
+        "card_rows" : {
+          "type" : "array",
+          "description" : "卡片包含的行",
+          "items" : {
+            "$ref" : "#/definitions/CardRow"
+          }
+        }
+      },
+      "description" : "首页卡片"
+    },
+    "CardRow" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "行id (主键)"
+        },
+        "controller" : {
+          "type" : "string",
+          "description" : "控件 (label,image,button,line...可扩充)"
+        },
+        "formats" : {
+          "type" : "array",
+          "description" : "行样式列表",
+          "items" : {
+            "$ref" : "#/definitions/RowFormat"
+          }
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "值 (文本:文本内容,图片:图片地址, 按钮:按钮文字...)"
+        },
+        "actiocn" : {
+          "type" : "string",
+          "description" : "执行方法(task:任务,event:活动,statement:对账单,url:跳转,notice:弹窗提示...可扩充)"
+        },
+        "parameter" : {
+          "type" : "string",
+          "description" : "执行参数(task:任务id, event:活动id, statement:对账单id, url:跳转网址,notice:显示内容...)"
+        }
+      },
+      "description" : "卡片行"
+    },
+    "RowFormat" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "description" : "样式名 (alignment,fontsize,colorhex,height ...可扩充)"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "对应的值 (alignment:left/center/right ,fontsize:10 ,colorhex:FFFFFF, height:20)"
+        }
+      },
+      "description" : "行样式"
+    },
+    "Task" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "任务id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "任务名"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "任务类型 (visit:拜访 ......)"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "任务状态 (review:审核中,approved:已审核,rejected:无效)"
+        },
+        "hospital" : {
+          "type" : "string",
+          "description" : "医院"
+        },
+        "department" : {
+          "type" : "string",
+          "description" : "科室"
+        },
+        "start_date" : {
+          "type" : "string",
+          "format" : "datetime",
+          "description" : "任务有效期 起始"
+        },
+        "end_date" : {
+          "type" : "string",
+          "format" : "datetime",
+          "description" : "任务有效期 结束"
+        },
+        "goal" : {
+          "type" : "string",
+          "description" : "任务目标"
+        },
+        "single_reward" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "单人奖励"
+        },
+        "total_reward" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "总奖励(邀请人数 X 单人奖励)"
+        },
+        "max_reward" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "该任务最大奖励额度"
+        },
+        "child_tasks" : {
+          "type" : "array",
+          "description" : "子任务类型列表(显示包含哪些奖励)",
+          "items" : {
+            "$ref" : "#/definitions/ChildTaskType"
+          }
+        }
+      },
+      "description" : "任务"
+    },
+    "ChildTaskType" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "子任务类型id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "任务类型名"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "任务类型 (read:医生阅读, survey:调研 ,visit:拜访反馈)"
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "奖励金额"
+        },
+        "point" : {
+          "type" : "integer",
+          "description" : "奖励积分"
+        },
+        "credit" : {
+          "type" : "integer",
+          "description" : "奖励信用"
+        },
+        "max_count" : {
+          "type" : "integer",
+          "description" : "最大完成次数"
+        }
+      },
+      "description" : "子任务类型信息"
+    },
+    "TaskDoctor" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "医生id"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "医生名"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "医生状态 (review:审核中,approved:已审核,rejected:无效,follow:已关注)"
+        },
+        "child_task_ref" : {
+          "type" : "array",
+          "description" : "子任务状态",
+          "items" : {
+            "$ref" : "#/definitions/ChildTask"
+          }
+        }
+      },
+      "description" : "已添加到任务的医生"
+    },
+    "ChildTask" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "子任务id (主键)"
+        },
+        "doctor_id" : {
+          "type" : "integer",
+          "description" : "医生id"
+        },
+        "task_name" : {
+          "type" : "string",
+          "description" : "子任务名 (类型名)"
+        },
+        "task_type" : {
+          "type" : "string",
+          "description" : "任务类型 (read:医生阅读, survey:调研 ,visit:拜访反馈)"
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "奖励金额"
+        },
+        "point" : {
+          "type" : "integer",
+          "description" : "奖励积分"
+        },
+        "credit" : {
+          "type" : "integer",
+          "description" : "奖励信用"
+        },
+        "send_count" : {
+          "type" : "integer",
+          "description" : "已推送次数"
+        },
+        "pending_count" : {
+          "type" : "integer",
+          "description" : "未完成个数"
+        },
+        "max_count" : {
+          "type" : "integer",
+          "description" : "最大完成次数"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "提示信息(当前子任务违反了运营某约束后,提示用户内容)"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "今日任务状态 (notstart:未开始,pending:等待医生完成,rejected:违反运营规则,complete:时间段内完成,finish:全部完成)"
+        }
+      },
+      "description" : "子任务和任务医生关系"
+    },
+    "Document" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "文献id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "文献名"
+        },
+        "image_url" : {
+          "type" : "string",
+          "description" : "文献缩略图地址"
+        },
+        "weixin_url" : {
+          "type" : "string",
+          "description" : "推送Url"
+        },
+        "file_name" : {
+          "type" : "string",
+          "description" : "文件名"
+        },
+        "file_type" : {
+          "type" : "string",
+          "description" : "文件后缀名"
+        },
+        "file_url" : {
+          "type" : "string",
+          "description" : "文件地址"
+        }
+      },
+      "description" : "文献"
+    },
+    "Survey" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "调研id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "调研名"
+        },
+        "image_url" : {
+          "type" : "string",
+          "description" : "调研缩略图地址 (备用)"
+        },
+        "weixin_url" : {
+          "type" : "string",
+          "description" : "推送Url"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "可执行状态相对子任务 (send:不可查阅可发送,enable:可提交,disable:不可用仅可查阅)"
+        },
+        "questions" : {
+          "type" : "array",
+          "description" : "问题列表",
+          "items" : {
+            "$ref" : "#/definitions/Question"
+          }
+        }
+      },
+      "description" : "调研"
+    },
+    "Question" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "问题id (主键)"
+        },
+        "question" : {
+          "type" : "string",
+          "description" : "问题"
+        },
+        "answers" : {
+          "type" : "array",
+          "description" : "回答",
+          "items" : {
+            "$ref" : "#/definitions/Question_answers"
+          }
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "问题类型 (signel:单选,multiple:多选,input:填空)"
+        }
+      },
+      "description" : "调研问题"
+    },
+    "Config" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "in64",
+          "description" : "id (主键) 固定值"
+        },
+        "notice" : {
+          "type" : "string",
+          "description" : "公告信息"
+        },
+        "withdrawals_weekday" : {
+          "type" : "integer",
+          "description" : "提现周天(标准西历周天 1:周日,2:周一 ...7:周六)"
+        },
+        "banks" : {
+          "type" : "array",
+          "description" : "银行列表",
+          "items" : {
+            "$ref" : "#/definitions/Bank"
+          }
+        }
+      },
+      "description" : "配置信息"
+    },
+    "Bank" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "in64",
+          "description" : "银行id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "银行名"
+        },
+        "value" : {
+          "type" : "string",
+          "description" : "银行缩写"
+        }
+      },
+      "description" : "银行信息"
+    },
+    "UserInfo" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "in64",
+          "description" : "用户id (主键)"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "description" : "用户信息 (未完成)"
+    },
+    "UserAccount" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "账户id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "账户名"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "账户类型 (个人,团队)"
+        },
+        "balance" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "可用余额"
+        },
+        "income" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "累积收入"
+        },
+        "tba" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "待入账金额"
+        },
+        "tbs_count" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "待确认对账单数"
+        }
+      },
+      "description" : "用户账户"
+    },
+    "UserBankCard" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "银行卡id (主键)"
+        },
+        "username" : {
+          "type" : "string",
+          "description" : "姓名"
+        },
+        "id_card" : {
+          "type" : "string",
+          "description" : "身份证"
+        },
+        "bank_card" : {
+          "type" : "string",
+          "description" : "银行卡号"
+        },
+        "phone" : {
+          "type" : "string",
+          "description" : "手机号"
+        },
+        "start_bank" : {
+          "type" : "string",
+          "description" : "开户行"
+        },
+        "start_city" : {
+          "type" : "string",
+          "description" : "开户地"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "状态 (无效,有效)"
+        }
+      },
+      "description" : "用户银行卡"
+    },
+    "Balance" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "账户id (主键)"
+        },
+        "balance_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "可提现余额"
+        },
+        "tbc_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "待确认金额"
+        },
+        "withdrawals" : {
+          "type" : "array",
+          "description" : "提现记录",
+          "items" : {
+            "$ref" : "#/definitions/Withdrawals"
+          }
+        }
+      },
+      "description" : "余额"
+    },
+    "Withdrawals" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "提现流水id (主键)"
+        },
+        "account_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "提现账户id"
+        },
+        "bankcard_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "银行卡id"
+        },
+        "bankcard_no" : {
+          "type" : "string",
+          "description" : "银行卡No"
+        },
+        "bank_name" : {
+          "type" : "string",
+          "description" : "银行名"
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "提现金额"
+        },
+        "date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "提现日期"
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "消息(失败的情况可能返回原因)"
+        },
+        "status" : {
+          "type" : "string",
+          "description" : "状态 (失败,处理中,已到账)"
+        }
+      },
+      "description" : "提现记录"
+    },
+    "TotalIncome" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "账户id (主键)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "账户名"
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "账户类型 (个人,团队)"
+        },
+        "amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "总金"
+        },
+        "chart_name" : {
+          "type" : "string",
+          "description" : "图形报表名"
+        },
+        "charts" : {
+          "type" : "array",
+          "description" : "报表数据",
+          "items" : {
+            "$ref" : "#/definitions/ChartData"
+          },
+          "maxItems" : 24
+        },
+        "already_accounted" : {
+          "type" : "array",
+          "description" : "已入账列表",
+          "items" : {
+            "$ref" : "#/definitions/SourceDetail"
+          }
+        }
+      },
+      "description" : "累积收入"
+    },
+    "ChartData" : {
+      "type" : "object",
+      "properties" : {
+        "xlabel" : {
+          "type" : "string",
+          "description" : "x轴的值的label"
+        },
+        "xvalue" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "x轴的值"
+        }
+      },
+      "description" : "图形报表数据"
+    },
+    "StatementSet" : {
+      "type" : "object",
+      "required" : [ "amount_sum" ],
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "账户id(主键)"
+        },
+        "amount_sum" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "对账单列表中的总金额"
+        },
+        "items" : {
+          "type" : "array",
+          "description" : "对账单列表",
+          "items" : {
+            "$ref" : "#/definitions/StatementofAccount"
+          }
+        }
+      },
+      "description" : "对账单集合 包括统计信息",
+      "example" : {
+        "amount_sum" : 100,
+        "items" : [ ]
+      }
+    },
+    "StatementofAccount" : {
+      "type" : "object",
+      "required" : [ "statement_id" ],
+      "properties" : {
+        "statement_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "对账单 id (主键)"
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "对账单显示名"
+        },
+        "statement_create_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "对账单创建日期"
+        },
+        "statement_start_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "对账单起始日期"
+        },
+        "statement_end_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "对账单结束日期"
+        },
+        "statement_account_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "对账单金额"
+        },
+        "statement_sources" : {
+          "type" : "array",
+          "description" : "对账单资金来源列表",
+          "items" : {
+            "$ref" : "#/definitions/StatementSources"
+          }
+        },
+        "statement_statisitcs" : {
+          "type" : "array",
+          "description" : "统计列表",
+          "items" : {
+            "$ref" : "#/definitions/StatementStatisitcs"
+          }
+        }
+      },
+      "description" : "对账单"
+    },
+    "StatementSources" : {
+      "type" : "object",
+      "properties" : {
+        "source_type" : {
+          "type" : "string",
+          "description" : "收入来源类型"
+        },
+        "source_type_name" : {
+          "type" : "string",
+          "description" : "来源类型显示名"
+        },
+        "source_name" : {
+          "type" : "string",
+          "description" : "来源名 (拜访:为医院名)"
+        },
+        "source_descripiton" : {
+          "type" : "string",
+          "description" : "来源注解 (拜访:为产品名,其他情况:空)"
+        },
+        "source_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "来源金额"
+        },
+        "source_status" : {
+          "type" : "string",
+          "description" : "来源状态 (英文)"
+        },
+        "source_status_name" : {
+          "type" : "string",
+          "description" : "来源状态 (当指明细中包括特殊状态时返回需要显示的文字)"
+        },
+        "source_details" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/SourceDetail"
+          }
+        }
+      },
+      "description" : "对账单资金来源分组"
+    },
+    "SourceDetail" : {
+      "type" : "object",
+      "required" : [ "source_id" ],
+      "properties" : {
+        "source_id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "来源id"
+        },
+        "source_type" : {
+          "type" : "string",
+          "description" : "来源类型 (拜访,经纪人佣金,邀请,活动...)"
+        },
+        "source_type_name" : {
+          "type" : "string",
+          "description" : "来源类型显示名"
+        },
+        "source_name" : {
+          "type" : "string",
+          "description" : "来源名 (拜访:拜访的步骤 , 经纪人佣金:月份 , 活动:活动名 ,邀请:邀请名)"
+        },
+        "source_date" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "发生日期"
+        },
+        "source_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "产生的金额"
+        },
+        "source_status" : {
+          "type" : "string",
+          "description" : "来源状态"
+        },
+        "source_status_name" : {
+          "type" : "string",
+          "description" : "来源状态显示名 (未出账,无效,待入账,已入账)"
+        },
+        "source_product" : {
+          "type" : "string",
+          "description" : "行为相关产品名"
+        },
+        "source_hospital" : {
+          "type" : "string",
+          "description" : "行为相关医院"
+        },
+        "source_doctor" : {
+          "type" : "string",
+          "description" : "行为相关医生"
+        }
+      },
+      "description" : "资金来源明细"
+    },
+    "StatementStatisitcs" : {
+      "type" : "object",
+      "properties" : {
+        "statisitcs_name" : {
+          "type" : "string",
+          "description" : "统计名称"
+        },
+        "statisitcs_count" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "统计个数"
+        },
+        "statisitcs_amount" : {
+          "type" : "number",
+          "format" : "float",
+          "description" : "统计金额"
+        },
+        "statisitcs_display_type" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "统计项显示类型 (如:0=默认,1=红字重点显示)"
+        }
+      },
+      "description" : "对账单统计"
+    },
+    "Error" : {
+      "type" : "object",
+      "properties" : {
+        "code" : {
+          "type" : "integer",
+          "format" : "int32"
+        },
+        "message" : {
+          "type" : "string"
+        },
+        "fields" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_200" : {
+      "properties" : {
+        "session_id" : {
+          "type" : "string",
+          "description" : "session_id"
+        }
+      }
+    },
+    "status" : {
+      "type" : "object",
+      "required" : [ "status" ],
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_200_1" : {
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "账单状id"
+        }
+      }
+    },
+    "card" : {
+      "type" : "object",
+      "required" : [ "bank_card", "id_card", "phone", "start_bank", "username" ],
+      "properties" : {
+        "username" : {
+          "type" : "string"
+        },
+        "id_card" : {
+          "type" : "string"
+        },
+        "bank_card" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "start_bank" : {
+          "type" : "string"
+        }
+      }
+    },
+    "inline_response_200_2" : {
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "银行卡id"
+        }
+      }
+    },
+    "parameter" : {
+      "type" : "object",
+      "required" : [ "account_id", "amount", "bankcard_id" ],
+      "properties" : {
+        "account_id" : {
+          "type" : "integer"
+        },
+        "bankcard_id" : {
+          "type" : "integer"
+        },
+        "amount" : {
+          "type" : "number"
+        }
+      }
+    },
+    "inline_response_200_3" : {
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "提现请求id"
+        }
+      }
+    },
+    "inline_response_200_4" : {
+      "properties" : {
+        "status" : {
+          "type" : "string"
+        }
+      }
+    },
+    "Question_answers" : {
+      "properties" : {
+        "answer" : {
+          "type" : "string",
+          "description" : "回答 (包括'A:')"
+        },
+        "point" : {
+          "type" : "integer",
+          "description" : "得分"
+        }
+      }
+    }
+  }
+}
