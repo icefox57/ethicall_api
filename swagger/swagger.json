@@ -13,6 +13,7 @@
     "/login/" : {
       "get" : {
         "tags" : [ "登入" ],
+        "summary" : "test1",
         "parameters" : [ {
           "name" : "username",
           "in" : "query",
