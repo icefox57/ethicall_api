@@ -16,6 +16,7 @@
     "paths": {
         "/login/": {
             "get": {
+                "summary": "login",
                 "parameters": [
                     {
                         "name": "username",
