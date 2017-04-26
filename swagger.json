@@ -151,6 +151,7 @@
       },
       "post" : {
         "summary" : "update statement status",
+        "tags" : [ "对账单" ],
         "description" : "修改对账单状态",
         "parameters" : [ {
           "name" : "id",
@@ -337,6 +338,7 @@
       },
       "post" : {
         "summary" : "add user's bankcard",
+        "tags" : [ "用户" ],
         "description" : "添加银行卡",
         "parameters" : [ {
           "name" : "card",
@@ -440,6 +442,7 @@
       },
       "post" : {
         "summary" : "add withdrawls request",
+        "tags" : [ "提现" ],
         "description" : "提现",
         "parameters" : [ {
           "name" : "parameter",
