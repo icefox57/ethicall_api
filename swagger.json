@@ -12,7 +12,7 @@
   "paths" : {
     "/login/" : {
       "get" : {
-        "summary" : "test",
+        "summary" : "test1",
         "parameters" : [ {
           "name" : "username",
           "in" : "query",
