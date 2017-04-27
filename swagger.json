@@ -746,11 +746,11 @@
       "properties" : {
         "name" : {
           "type" : "string",
-          "description" : "样式名 (alignment,fontsize,colorhex,height ...可扩充)"
+          "description" : "样式名 (alignment,fontsize,colorhex,height,bgcolor,hmargin,vmargin ...可扩充)"
         },
         "value" : {
           "type" : "string",
-          "description" : "对应的值 (alignment:left/center/right ,fontsize:10 ,colorhex:FFFFFF, height:20)"
+          "description" : "对应的值 (alignment:left/center/right ,fontsize:14 ,colorhex:FFFFFF, height:44 , bgcolor:FFFFFF , hmargin:10,vmargin:5)"
         }
       }
     },
