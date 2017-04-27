@@ -1053,6 +1053,10 @@
           "type" : "integer",
           "description" : "提现周天(标准西历周天 1:周日,2:周一 ...7:周六)"
         },
+        "withdrawals_available" : {
+          "type" : "integer",
+          "description" : "0:not available 1:available"
+        },
         "banks" : {
           "type" : "array",
           "description" : "银行列表",
