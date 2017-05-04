@@ -774,13 +774,29 @@
           "type" : "string",
           "description" : "任务状态 (review:审核中,approved:已审核,rejected:无效)"
         },
-        "hospital" : {
+        "hospital_id" : {
           "type" : "string",
-          "description" : "医院"
+          "description" : "医院id"
         },
-        "department" : {
+        "department_id" : {
           "type" : "string",
-          "description" : "科室"
+          "description" : "科室id"
+        },
+        "product_id" : {
+          "type" : "string",
+          "description" : "产品id"
+        },
+        "hospital_name" : {
+          "type" : "string",
+          "description" : "医院名"
+        },
+        "department_name" : {
+          "type" : "string",
+          "description" : "科室名"
+        },
+        "product_name" : {
+          "type" : "string",
+          "description" : "产品名"
         },
         "start_date" : {
           "type" : "string",
@@ -796,7 +812,7 @@
           "type" : "string",
           "description" : "任务目标"
         },
-        "single_reward" : {
+        "current_reward" : {
           "type" : "number",
           "format" : "float",
           "description" : "单人奖励"
