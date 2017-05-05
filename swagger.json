@@ -512,6 +512,43 @@
         }
       }
     },
+    "/hospital/search/" : {
+      "get" : {
+        "summary" : "fast get hospital name & id",
+        "tags" : [ "基础" ],
+        "parameters" : [ {
+          "name" : "name",
+          "in" : "query",
+          "description" : "name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "首页卡片列表",
+            "schema" : {
+              "type" : "object",
+              "properties" : {
+                "id" : {
+                  "type" : "string",
+                  "description" : "hospital id"
+                },
+                "name" : {
+                  "type" : "string",
+                  "description" : "hospital name"
+                }
+              }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
     "/hospital/{id}" : {
       "get" : {
         "summary" : "get hospital object",
