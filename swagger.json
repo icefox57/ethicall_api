@@ -492,7 +492,7 @@
       "get" : {
         "summary" : "首页卡片列表",
         "description" : "获取用户某账户的提现记录",
-        "tags" : [ "首页" ],
+        "tags" : [ "基础" ],
         "responses" : {
           "200" : {
             "description" : "首页卡片列表",
@@ -501,6 +501,33 @@
               "items" : {
                 "$ref" : "#/definitions/Card"
               }
+            }
+          },
+          "default" : {
+            "description" : "Unexpected error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/hospital/{id}" : {
+      "get" : {
+        "summary" : "get hospital object",
+        "tags" : [ "基础" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "hosptial id",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "首页卡片列表",
+            "schema" : {
+              "$ref" : "#/definitions/Hospital"
             }
           },
           "default" : {
@@ -528,7 +555,7 @@
           "200" : {
             "description" : "任务",
             "schema" : {
-              "$ref" : "#/definitions/Task"
+              "$ref" : "#/definitions/Hospital"
             }
           },
           "default" : {
@@ -686,6 +713,94 @@
     }
   },
   "definitions" : {
+    "Product" : {
+      "description" : "product",
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "product id (key)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "product name"
+        },
+        "department_ids" : {
+          "type" : "array",
+          "description" : "departments's id can use this product",
+          "items" : {
+            "properties" : {
+              "id" : {
+                "type" : "string",
+                "description" : "department id"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "department name"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Department" : {
+      "description" : "Department",
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "Department id (key)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Department name"
+        },
+        "products" : {
+          "type" : "array",
+          "description" : "products's id department can use",
+          "items" : {
+            "properties" : {
+              "id" : {
+                "type" : "string",
+                "description" : "product id"
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "product name"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Hospital" : {
+      "description" : "Hospital",
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "Hospital id (key)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Hospital name"
+        },
+        "departments" : {
+          "type" : "array",
+          "description" : "Hospital's departments",
+          "items" : {
+            "$ref" : "#/definitions/Department"
+          }
+        },
+        "products" : {
+          "type" : "array",
+          "description" : "Hospiatal's products",
+          "items" : {
+            "$ref" : "#/definitions/Product"
+          }
+        }
+      }
+    },
     "Card" : {
       "description" : "首页卡片",
       "type" : "object",
@@ -774,25 +889,16 @@
           "type" : "string",
           "description" : "任务状态 (review:审核中,approved:已审核,rejected:无效)"
         },
-        "hospital_id" : {
-          "type" : "string",
-          "description" : "医院id"
-        },
-        "department_id" : {
-          "type" : "string",
-          "description" : "科室id"
+        "hospital" : {
+          "type" : "object",
+          "description" : "task hospital",
+          "items" : {
+            "$ref" : "#/definitions/Hospital"
+          }
         },
         "product_id" : {
           "type" : "string",
-          "description" : "产品id"
-        },
-        "hospital_name" : {
-          "type" : "string",
-          "description" : "医院名"
-        },
-        "department_name" : {
-          "type" : "string",
-          "description" : "科室名"
+          "description" : "产品id名"
         },
         "product_name" : {
           "type" : "string",
