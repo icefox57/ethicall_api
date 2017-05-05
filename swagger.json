@@ -592,7 +592,7 @@
           "200" : {
             "description" : "任务",
             "schema" : {
-              "$ref" : "#/definitions/Hospital"
+              "$ref" : "#/definitions/Task"
             }
           },
           "default" : {
