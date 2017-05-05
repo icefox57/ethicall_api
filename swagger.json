@@ -926,9 +926,9 @@
           "type" : "string",
           "description" : "任务状态 (review:审核中,approved:已审核,rejected:无效)"
         },
-        "hospital" : {
+        "hospitals" : {
           "type" : "array",
-          "description" : "task hospital",
+          "description" : "task hospitals",
           "items" : {
             "$ref" : "#/definitions/Hospital"
           }
