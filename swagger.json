@@ -792,7 +792,7 @@
           "type" : "string",
           "description" : "Department name"
         },
-        "products" : {
+        "product_ids" : {
           "type" : "array",
           "description" : "products's id department can use",
           "items" : {
