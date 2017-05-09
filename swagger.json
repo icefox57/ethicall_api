@@ -1202,26 +1202,15 @@
         "id" : {
           "type" : "integer",
           "format" : "in64",
-          "description" : "id (主键) 固定值"
+          "description" : "id (主键)"
         },
-        "notice" : {
+        "key" : {
           "type" : "string",
-          "description" : "公告信息"
+          "description" : "key (notice:公告信息,withdrawals_weekday:提现周天,withdrawals_available:是否可提现,banks)"
         },
-        "withdrawals_weekday" : {
-          "type" : "integer",
-          "description" : "提现周天(标准西历周天 1:周日,2:周一 ...7:周六)"
-        },
-        "withdrawals_available" : {
-          "type" : "integer",
-          "description" : "0:not available 1:available"
-        },
-        "banks" : {
-          "type" : "array",
-          "description" : "银行列表",
-          "items" : {
-            "$ref" : "#/definitions/Bank"
-          }
+        "value" : {
+          "type" : "string",
+          "description" : "config value (如果是多个数值则逗号间隔)"
         }
       }
     },
