@@ -736,7 +736,10 @@
           "200" : {
             "description" : "配置列表",
             "schema" : {
-              "$ref" : "#/definitions/Config"
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Config"
+              }
             }
           },
           "default" : {
