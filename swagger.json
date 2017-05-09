@@ -753,6 +753,59 @@
     }
   },
   "definitions" : {
+    "Doctor" : {
+      "description" : "doctor",
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "integer",
+          "description" : "doctor id (key)"
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "doctor name"
+        },
+        "department_id" : {
+          "type" : "integer",
+          "description" : "department id"
+        },
+        "department_name" : {
+          "type" : "string",
+          "description" : "department name"
+        },
+        "rank_title" : {
+          "type" : "string",
+          "description" : "职称"
+        },
+        "job_title" : {
+          "type" : "string",
+          "description" : "头衔"
+        },
+        "gender" : {
+          "type" : "string",
+          "description" : "sex"
+        },
+        "phone" : {
+          "type" : "string",
+          "description" : "phone"
+        },
+        "email" : {
+          "type" : "string",
+          "description" : "email"
+        },
+        "images" : {
+          "type" : "array",
+          "items" : {
+            "properties" : {
+              "url" : {
+                "type" : "string",
+                "description" : "image url"
+              }
+            }
+          }
+        }
+      }
+    },
     "Product" : {
       "description" : "product",
       "type" : "object",
@@ -1028,6 +1081,12 @@
         "name" : {
           "type" : "string",
           "description" : "医生名"
+        },
+        "doctor" : {
+          "type" : "object",
+          "items" : {
+            "$ref" : "#/definitions/Doctor"
+          }
         },
         "status" : {
           "type" : "string",
